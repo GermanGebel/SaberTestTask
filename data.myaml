@@ -1,0 +1,12 @@
+1:
+	Data: data_a
+	Rand: nullptr
+2:
+	Data: data_b
+	Rand: 2
+3:
+	Data: data_c
+	Rand: 1
+4:
+	Data: data_d
+	Rand: 2
