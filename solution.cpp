@@ -16,6 +16,15 @@ std::string returnValue(std::string s){
     return s.substr(7, s.size() - 2);
 }
 
+std::string replaseAllSlashN(std::string str, const std::string from, const std::string to){
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+    }
+    return str;
+}
+
 class ListNode
 {
     public: 
@@ -54,7 +63,9 @@ class ListRand
             for(int i=1; ;i++){
                 std::string si = std::to_string(i);
 
-                serializatorMap[si]["Data"] = node->Data;
+                std::string data = replaseAllSlashN(node->Data, "\n", "\\n"); 
+
+                serializatorMap[si]["Data"] = data;
                 node->Data = si; // to next loop orientation of rand
 
                 if (node->Next == nullptr) break;
@@ -81,8 +92,8 @@ class ListRand
             if (out.is_open()){
                 for (auto &x : serializatorMap){
                     out << x.first << ":\n\t";
-                    out << "Data: " << x.second["Data"] << "\n\t";
-                    out << "Rand: " << x.second["Rand"] << "\n";
+                    out << "Rand: " << x.second["Rand"] << "\n\t";
+                    out << "Data: " << x.second["Data"] << "\n";
                 }
             }
 
@@ -108,10 +119,10 @@ class ListRand
                     key = returnKey(line);
                     break;
                 case 1:
-                    data = returnValue(line);
+                    rand = returnValue(line);
                     break;
                 case 2:
-                    rand = returnValue(line);
+                    data = replaseAllSlashN(returnValue(line), "\\n", "\n");
                     break;
                 }
                 count++; 
@@ -157,12 +168,12 @@ class ListRand
 void showListNode(ListNode *head){
     ListNode *node = head;
     while (true){
-        std::cout << "Data: " << node->Data;
-        if (node->Next != nullptr) std::cout << " Next: " << node->Next->Data;
+        std::cout << "Data: " << replaseAllSlashN(node->Data, "\n", "\\n");
+        if (node->Next != nullptr) std::cout << " Next: " << replaseAllSlashN(node->Next->Data, "\n", "\\n");
         else std::cout << " Next: nullptr";
-        if (node->Prev != nullptr) std::cout << " Prev: " << node->Prev->Data;
+        if (node->Prev != nullptr) std::cout << " Prev: " << replaseAllSlashN(node->Prev->Data, "\n", "\\n");
         else std::cout << " Prev: nullptr";
-        if (node->Rand != nullptr) std::cout << " Rand: " << node->Rand->Data << std::endl;
+        if (node->Rand != nullptr) std::cout << " Rand: " << replaseAllSlashN(node->Rand->Data, "\n", "\\n") << std::endl;
         else std::cout << " Rand: nullptr\n";
 
         if (node->Next == nullptr) break;
@@ -171,9 +182,9 @@ void showListNode(ListNode *head){
 }
 
 int main(){
-    ListNode a = ListNode(nullptr, nullptr, nullptr, "data_a");
-    ListNode b = ListNode(nullptr, nullptr, nullptr, "data_b");
-    ListNode c = ListNode(nullptr, nullptr, nullptr, "data_c");
+    ListNode a = ListNode(nullptr, nullptr, nullptr, "data_a\ndata_a2");
+    ListNode b = ListNode(nullptr, nullptr, nullptr, "data_b\ndata_b2");
+    ListNode c = ListNode(nullptr, nullptr, nullptr, "data_c\t\n");
     ListNode d = ListNode(nullptr, nullptr, nullptr, "data_d");
 
     a.Next = &b;
@@ -201,7 +212,8 @@ int main(){
     std::cout << "After deserialization: \n";
     showListNode(listRand.Head);
 
-    std::cin.get();
+    std::cout << "Press Enter...";
+    std::cin.get(); // pause 
     return 0;
 }
 

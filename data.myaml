@@ -1,12 +1,12 @@
 1:
-	Data: data_a
 	Rand: nullptr
+	Data: data_a\ndata_a2
 2:
-	Data: data_b
 	Rand: 2
+	Data: data_b\ndata_b2
 3:
-	Data: data_c
 	Rand: 1
+	Data: data_c	\n
 4:
-	Data: data_d
 	Rand: 2
+	Data: data_d
