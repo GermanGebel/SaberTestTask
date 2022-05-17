@@ -18,25 +18,26 @@ std::string returnValue(std::string s, int pass) {
 
 class ListNode
 {
-public:
-    ListNode* Prev;
-    ListNode* Next;
-    ListNode* Rand;
-    std::string Data;
+    public:
+        ListNode* Prev;
+        ListNode* Next;
+        ListNode* Rand;
+        std::string Data;
 
-    ListNode() {
-        this->Prev = nullptr;
-        this->Next = nullptr;
-        this->Rand = nullptr;
-        this->Data = "";
-    };
+        ListNode() {
+            this->Prev = nullptr;
+            this->Next = nullptr;
+            this->Rand = nullptr;
+            this->Data = "";
+        };
 
-    ListNode(ListNode* prev, ListNode* next, ListNode* rand, std::string data) {
-        this->Prev = prev;
-        this->Next = next;
-        this->Rand = rand;
-        this->Data = data;
-    };
+        ListNode(ListNode* prev, ListNode* next, ListNode* rand, std::string data) {
+            this->Prev = prev;
+            this->Next = next;
+            this->Rand = rand;
+            this->Data = data;
+        };
+
 };
 
 class ListRand
@@ -46,7 +47,7 @@ public:
     ListNode* Tail;
     int Count;
 
-    void Serialize(std::string filename) {
+    void Serialize(std::string filename) { 
         ListNode* node = Head;
 
         std::map<std::string, std::map<std::string, std::string>> serializatorMap;
@@ -75,6 +76,18 @@ public:
             if (node->Next == nullptr) break;
             node = node->Next;
         }
+
+        node = Head;
+        // loop 3: return data
+        for (int i = 1; ; i++) {
+            std::string si = std::to_string(i);
+
+            node->Data = serializatorMap[si]["Data"];
+
+            if (node->Next == nullptr) break;
+            node = node->Next;
+        }
+
 
         std::ofstream out;
         out.open(filename);
@@ -185,7 +198,6 @@ std::string replaseAll(std::string str, const std::string from, const std::strin
 void showListNode(ListNode* head) {
     ListNode* node = head;
     while (true) {
-        if (node == nullptr) break;
         std::cout << "Data: " << replaseAll(node->Data, "\n", "\\n");
         if (node->Next != nullptr) std::cout << " Next: " << replaseAll(node->Next->Data, "\n", "\\n");
         else std::cout << " Next: nullptr";
@@ -199,7 +211,8 @@ void showListNode(ListNode* head) {
     }
 }
 
-int main() {
+
+int mycheck() {
     ListNode a = ListNode(nullptr, nullptr, nullptr, "data_a\ndata_a2\n");
     ListNode b = ListNode(nullptr, nullptr, nullptr, "data_b\ndata_b2");
     ListNode c = ListNode(nullptr, nullptr, nullptr, "data_c\t\n");
@@ -218,19 +231,28 @@ int main() {
     d.Prev = &c;
     d.Rand = &b;
 
-    ListRand listRand;
-    listRand.Head = &a;
+    ListRand listRand1, listRand2;
+    listRand1.Head = &a;
     // show(listRand.Head);
     std::cout << "Before serialization: \n";
-    showListNode(listRand.Head);
+    showListNode(listRand1.Head);
 
-    listRand.Serialize("data.myaml");
-    listRand.Deserialize("data.myaml");
+    listRand1.Serialize("data.myaml");
+
+    listRand2.Deserialize("data.myaml");
 
     std::cout << "After deserialization: \n";
-    showListNode(listRand.Head);
+    showListNode(listRand2.Head);
 
     std::cout << "Press Enter...";
     std::cin.get(); // pause 
     return 0;
 }
+
+
+int main(){
+    mycheck();
+    
+}
+
+
